@@ -104,7 +104,7 @@ namespace TreningTracker.Forms
                 string durationStr = ts.Duration.ToString(@"hh\:mm\:ss");
                 dataGridView.Rows.Add(
                     ts.Id,
-                    ts.Date.ToShortDateString(),
+                    ts.Date.ToLocalTime().ToShortDateString(),
                     ts.ActivityType != null ? ts.ActivityType.Name : "",
                     ts.Distance,
                     durationStr,
@@ -163,6 +163,43 @@ namespace TreningTracker.Forms
                 {
                     MessageBox.Show($"Wystąpił błąd podczas usuwania: {ex.Message}", "Błąd",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.SelectedRows.Count == 0 && dataGridView.SelectedCells.Count == 0)
+            {
+                MessageBox.Show("Zaznacz rekord do edycji.", "Informacja",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int rowIndex = dataGridView.SelectedCells[0].RowIndex;
+            int sessionId = Convert.ToInt32(dataGridView.Rows[rowIndex].Cells["colId"].Value);
+
+            var session = _context.TrainingSessions
+                .Include(ts => ts.ActivityType)
+                .FirstOrDefault(ts => ts.Id == sessionId);
+
+            if (session == null)
+            {
+                MessageBox.Show("Nie znaleziono wybranej sesji.", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (var editForm = new AddTrainingForm(session))
+            {
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    _context.Entry(session).Reload(); // odśwież dane z bazy
+                    _allSessions = _context.TrainingSessions.Include(ts => ts.ActivityType).ToList();
+                    ApplyFilters();
+
+                    MessageBox.Show("Dane zostały zaktualizowane.", "Sukces",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

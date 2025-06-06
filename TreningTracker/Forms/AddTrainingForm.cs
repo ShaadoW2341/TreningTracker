@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using TreningTracker.Data;
 using TreningTracker.Models;
 using Timer = System.Windows.Forms.Timer;
@@ -15,33 +14,53 @@ namespace TreningTracker.Forms
         private Timer _stopwatchTimer;
         private TimeSpan _stopwatchTime;
         private bool _stopwatchRunning = false;
-        private MainForm refresh;
+        private TrainingSession _editingSession;
+        private bool _isEditMode = false;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DialogResult FormResult { get; private set; } = DialogResult.Cancel;
 
-        public AddTrainingForm()
+        public AddTrainingForm(TrainingSession session)
         {
-            refresh = new MainForm();
-            _context = new AppDbContext();
             InitializeComponent();
-
-            _stopwatchTimer = new System.Windows.Forms.Timer(); 
-            _stopwatchTimer.Interval = 1000; 
+            _context = new AppDbContext();
+            _stopwatchTimer = new Timer { Interval = 1000 };
             _stopwatchTimer.Tick += StopwatchTimer_Tick;
 
-            dateTimePickerDate.Value = DateTime.Today.ToUniversalTime();
+            _editingSession = session;
+            _isEditMode = session != null && session.Id != 0;
 
             var activityTypes = _context.ActivityTypes.ToList();
-            if (activityTypes.Count > 0)
+            comboActivityType.DataSource = activityTypes;
+            comboActivityType.DisplayMember = "Name";
+            comboActivityType.ValueMember = "Id";
+
+            if (_isEditMode)
             {
-                comboActivityType.DataSource = activityTypes;
-                comboActivityType.DisplayMember = "Name";
-                comboActivityType.ValueMember = "Id";
+                LoadSessionData();
+            }
+            else
+            {
+                dateTimePickerDate.Value = DateTime.Today;
                 comboActivityType.SelectedIndex = 0;
             }
 
             comboActivityType_SelectedIndexChanged(null, null);
+        }
+
+        private void LoadSessionData()
+        {
+            if (_editingSession == null)
+                return;
+
+            dateTimePickerDate.Value = _editingSession.Date.ToLocalTime();
+            numericDistance.Value = (decimal)_editingSession.Distance;
+            numericHours.Value = _editingSession.Duration.Hours;
+            numericMinutes.Value = _editingSession.Duration.Minutes;
+            numericSeconds.Value = _editingSession.Duration.Seconds;
+            numericCalories.Value = _editingSession.Calories;
+            numericSteps.Value = _editingSession.Steps;
+            comboActivityType.SelectedValue = _editingSession.ActivityTypeId;
         }
 
         protected override void Dispose(bool disposing)
@@ -103,18 +122,13 @@ namespace TreningTracker.Forms
             }
         }
 
-
         private void StopwatchTimer_Tick(object sender, EventArgs e)
         {
             _stopwatchTime = _stopwatchTime.Add(TimeSpan.FromSeconds(1));
 
-            int hours = _stopwatchTime.Hours;
-            int minutes = _stopwatchTime.Minutes;
-            int seconds = _stopwatchTime.Seconds;
-
-            numericHours.Value = hours;
-            numericMinutes.Value = minutes;
-            numericSeconds.Value = seconds;
+            numericHours.Value = _stopwatchTime.Hours;
+            numericMinutes.Value = _stopwatchTime.Minutes;
+            numericSeconds.Value = _stopwatchTime.Seconds;
         }
 
         private void buttonStopwatch_Click(object sender, EventArgs e)
@@ -149,17 +163,18 @@ namespace TreningTracker.Forms
                 return;
             }
 
-            var newSession = new TrainingSession
-            {
-                Date = dateTimePickerDate.Value.Date.ToUniversalTime(),
-                Distance = (double)numericDistance.Value,
-                Duration = new TimeSpan((int)numericHours.Value, (int)numericMinutes.Value, (int)numericSeconds.Value),
-                Calories = (int)numericCalories.Value,
-                Steps = (int)numericSteps.Value,
-                ActivityTypeId = comboActivityType.SelectedValue != null ? (int)comboActivityType.SelectedValue : 0
-            };
+            TrainingSession sessionToSave = _isEditMode ? _context.TrainingSessions.Find(_editingSession.Id) : new TrainingSession();
 
-            _context.TrainingSessions.Add(newSession);
+            sessionToSave.Date = dateTimePickerDate.Value.Date.ToUniversalTime();
+            sessionToSave.Distance = (double)numericDistance.Value;
+            sessionToSave.Duration = new TimeSpan((int)numericHours.Value, (int)numericMinutes.Value, (int)numericSeconds.Value);
+            sessionToSave.Calories = (int)numericCalories.Value;
+            sessionToSave.Steps = (int)numericSteps.Value;
+            sessionToSave.ActivityTypeId = comboActivityType.SelectedValue != null ? (int)comboActivityType.SelectedValue : 0;
+
+            if (!_isEditMode)
+                _context.TrainingSessions.Add(sessionToSave);
+
             _context.SaveChanges();
 
             var goal = _context.GoalSettings.FirstOrDefault();
@@ -168,24 +183,28 @@ namespace TreningTracker.Forms
 
             if (goal != null)
             {
-                var sessionDate = newSession.Date;
+                var sessionDate = sessionToSave.Date;
                 int totalStepsThatDay = _context.TrainingSessions
                                                 .Where(ts => ts.Date.Date == sessionDate.Date)
                                                 .Sum(ts => ts.Steps);
+
                 if (totalStepsThatDay >= goal.DailyStepsGoal)
                     dailyGoalReached = true;
 
                 int dow = (int)sessionDate.DayOfWeek;
                 if (dow == 0) dow = 7;
+
                 var startOfWeek = sessionDate.AddDays(1 - dow).Date;
                 var endOfWeek = startOfWeek.AddDays(6);
+
                 int totalTrainingsThatWeek = _context.TrainingSessions
                                                      .Count(ts => ts.Date.Date >= startOfWeek && ts.Date.Date <= endOfWeek);
+
                 if (totalTrainingsThatWeek >= goal.WeeklyTrainingsGoal)
                     weeklyGoalReached = true;
             }
 
-            string message = "Trening dodany pomyślnie.";
+            string message = _isEditMode ? "Trening został zaktualizowany." : "Trening dodany pomyślnie.";
             if (dailyGoalReached && weeklyGoalReached)
                 message += "\nGratulacje! Zrealizowano dzisiejszy cel kroków oraz tygodniowy cel treningów.";
             else if (dailyGoalReached)
@@ -194,7 +213,7 @@ namespace TreningTracker.Forms
                 message += "\nGratulacje! Tygodniowy cel treningów został osiągnięty.";
 
             MessageBox.Show(message, "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
+
             this.FormResult = DialogResult.OK;
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -207,6 +226,7 @@ namespace TreningTracker.Forms
                 _stopwatchTimer.Stop();
                 _stopwatchRunning = false;
             }
+
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }

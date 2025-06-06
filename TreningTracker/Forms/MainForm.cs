@@ -72,7 +72,7 @@ namespace TreningTracker.Forms
 
         private void buttonAddTraining_Click(object sender, EventArgs e)
         {
-            using (var form = new AddTrainingForm())
+            using (var form = new AddTrainingForm(new TrainingSession()))
             {
                 var result = form.ShowDialog();
                 if (result == DialogResult.OK)  
@@ -85,6 +85,7 @@ namespace TreningTracker.Forms
                     RefreshSummaryData();
                 }
             }
+            
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
@@ -96,12 +97,6 @@ namespace TreningTracker.Forms
         private void buttonStats_Click(object sender, EventArgs e)
         {
             var form = new StatsForm();
-            form.Show();
-        }
-
-        private void buttonCharts_Click(object sender, EventArgs e)
-        {
-            var form = new ChartsForm();
             form.Show();
         }
 

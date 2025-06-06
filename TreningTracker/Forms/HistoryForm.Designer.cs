@@ -12,6 +12,7 @@ namespace TreningTracker.Forms
         private ComboBox comboTypeFilter;
         private DataGridView dataGridView;
         private Button buttonDelete;
+        private Button buttonEdit;
 
         private void InitializeComponent()
         {
@@ -21,6 +22,7 @@ namespace TreningTracker.Forms
             comboTypeFilter = new ComboBox();
             dataGridView = new DataGridView();
             buttonDelete = new Button();
+            buttonEdit = new Button();
             ((ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -82,6 +84,16 @@ namespace TreningTracker.Forms
             buttonDelete.UseVisualStyleBackColor = true;
             buttonDelete.Click += buttonDelete_Click;
             // 
+            // buttonEdit
+            // 
+            buttonEdit.Location = new Point(120, 450);
+            buttonEdit.Name = "buttonEdit";
+            buttonEdit.Size = new Size(100, 30);
+            buttonEdit.TabIndex = 6;
+            buttonEdit.Text = "Edytuj";
+            buttonEdit.UseVisualStyleBackColor = true;
+            buttonEdit.Click += buttonEdit_Click;
+            // 
             // HistoryForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -93,6 +105,7 @@ namespace TreningTracker.Forms
             Controls.Add(comboTypeFilter);
             Controls.Add(dataGridView);
             Controls.Add(buttonDelete);
+            Controls.Add(buttonEdit);
             Name = "HistoryForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Historia aktywności";
