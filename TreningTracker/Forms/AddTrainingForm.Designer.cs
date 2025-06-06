@@ -1,17 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
-using System.Drawing;
-using Microsoft.EntityFrameworkCore;
-using TreningTracker.Data;
-using TreningTracker.Models;
 
-namespace TreningTracker
+namespace TreningTracker.Forms
 {
-    public partial class AddTrainingForm : Form
+    partial class AddTrainingForm
     {
-        private AppDbContext _context;
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
         private Label labelDate;
         private Label labelType;
         private Label labelDistance;
@@ -23,42 +17,19 @@ namespace TreningTracker
         private NumericUpDown numericDistance;
         private NumericUpDown numericHours;
         private NumericUpDown numericMinutes;
+        private NumericUpDown numericSeconds;
+        private Label labelHours;
+        private Label labelMinutes;
+        private Label labelSeconds;
+        private Button buttonStopwatch;
         private NumericUpDown numericCalories;
         private NumericUpDown numericSteps;
         private Button buttonSave;
         private Button buttonCancel;
 
-        public AddTrainingForm()
-        {
-            _context = new AppDbContext();
-            InitializeComponent();
-            // Ustawienia pól domyślne
-            this.dateTimePickerDate.Value = DateTime.Today;
-            // Załaduj listę typów aktywności do pola wyboru
-            var activityTypes = _context.ActivityTypes.ToList();
-            if (activityTypes.Count > 0)
-            {
-                this.comboActivityType.DataSource = activityTypes;
-                this.comboActivityType.DisplayMember = "Name";
-                this.comboActivityType.ValueMember = "Id";
-                this.comboActivityType.SelectedIndex = 0;
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_context != null) _context.Dispose();
-                if (components != null) components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
-
         private void InitializeComponent()
         {
+            this.components = new Container();
             this.labelDate = new Label();
             this.labelType = new Label();
             this.labelDistance = new Label();
@@ -70,10 +41,21 @@ namespace TreningTracker
             this.numericDistance = new NumericUpDown();
             this.numericHours = new NumericUpDown();
             this.numericMinutes = new NumericUpDown();
+            this.numericSeconds = new NumericUpDown();
+            this.labelHours = new Label();
+            this.labelMinutes = new Label();
+            this.labelSeconds = new Label();
+            this.buttonStopwatch = new Button();
             this.numericCalories = new NumericUpDown();
             this.numericSteps = new NumericUpDown();
             this.buttonSave = new Button();
             this.buttonCancel = new Button();
+            ((ISupportInitialize)(this.numericDistance)).BeginInit();
+            ((ISupportInitialize)(this.numericHours)).BeginInit();
+            ((ISupportInitialize)(this.numericMinutes)).BeginInit();
+            ((ISupportInitialize)(this.numericSeconds)).BeginInit();
+            ((ISupportInitialize)(this.numericCalories)).BeginInit();
+            ((ISupportInitialize)(this.numericSteps)).BeginInit();
             this.SuspendLayout();
             // 
             // labelDate
@@ -109,6 +91,7 @@ namespace TreningTracker
             this.comboActivityType.Name = "comboActivityType";
             this.comboActivityType.Size = new System.Drawing.Size(180, 23);
             this.comboActivityType.TabIndex = 3;
+            this.comboActivityType.SelectedIndexChanged += new System.EventHandler(this.comboActivityType_SelectedIndexChanged);
             // 
             // labelDistance
             // 
@@ -124,10 +107,10 @@ namespace TreningTracker
             this.numericDistance.DecimalPlaces = 2;
             this.numericDistance.Location = new System.Drawing.Point(150, 98);
             this.numericDistance.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
+                1000,
+                0,
+                0,
+                0});
             this.numericDistance.Name = "numericDistance";
             this.numericDistance.Size = new System.Drawing.Size(80, 23);
             this.numericDistance.TabIndex = 5;
@@ -145,84 +128,135 @@ namespace TreningTracker
             // 
             this.numericHours.Location = new System.Drawing.Point(150, 138);
             this.numericHours.Maximum = new decimal(new int[] {
-            23,
-            0,
-            0,
-            0});
+                23,
+                0,
+                0,
+                0});
             this.numericHours.Name = "numericHours";
             this.numericHours.Size = new System.Drawing.Size(50, 23);
             this.numericHours.TabIndex = 7;
             // 
+            // labelHours
+            // 
+            this.labelHours.AutoSize = true;
+            this.labelHours.Location = new System.Drawing.Point(205, 140);
+            this.labelHours.Name = "labelHours";
+            this.labelHours.Size = new System.Drawing.Size(15, 15);
+            this.labelHours.TabIndex = 8;
+            this.labelHours.Text = "h";
+            // 
             // numericMinutes
             // 
-            this.numericMinutes.Location = new System.Drawing.Point(250, 138);
+            this.numericMinutes.Location = new System.Drawing.Point(230, 138);
             this.numericMinutes.Maximum = new decimal(new int[] {
-            59,
-            0,
-            0,
-            0});
+                59,
+                0,
+                0,
+                0});
             this.numericMinutes.Name = "numericMinutes";
             this.numericMinutes.Size = new System.Drawing.Size(50, 23);
-            this.numericMinutes.TabIndex = 8;
+            this.numericMinutes.TabIndex = 9;
+            // 
+            // labelMinutes
+            // 
+            this.labelMinutes.AutoSize = true;
+            this.labelMinutes.Location = new System.Drawing.Point(285, 140);
+            this.labelMinutes.Name = "labelMinutes";
+            this.labelMinutes.Size = new System.Drawing.Size(25, 15);
+            this.labelMinutes.TabIndex = 10;
+            this.labelMinutes.Text = "min";
+            // 
+            // numericSeconds
+            // 
+            this.numericSeconds.Location = new System.Drawing.Point(320, 138);
+            this.numericSeconds.Maximum = new decimal(new int[] {
+                59,
+                0,
+                0,
+                0});
+            this.numericSeconds.Name = "numericSeconds";
+            this.numericSeconds.Size = new System.Drawing.Size(50, 23);
+            this.numericSeconds.TabIndex = 11;
+            this.numericSeconds.Visible = false;
+            // 
+            // labelSeconds
+            // 
+            this.labelSeconds.AutoSize = true;
+            this.labelSeconds.Location = new System.Drawing.Point(375, 140);
+            this.labelSeconds.Name = "labelSeconds";
+            this.labelSeconds.Size = new System.Drawing.Size(15, 15);
+            this.labelSeconds.TabIndex = 12;
+            this.labelSeconds.Text = "s";
+            this.labelSeconds.Visible = false;
+            // 
+            // buttonStopwatch
+            // 
+            this.buttonStopwatch.Location = new System.Drawing.Point(150, 170);
+            this.buttonStopwatch.Name = "buttonStopwatch";
+            this.buttonStopwatch.Size = new System.Drawing.Size(80, 25);
+            this.buttonStopwatch.TabIndex = 13;
+            this.buttonStopwatch.Text = "Stoper";
+            this.buttonStopwatch.UseVisualStyleBackColor = true;
+            this.buttonStopwatch.Click += new System.EventHandler(this.buttonStopwatch_Click);
             // 
             // labelCalories
             // 
             this.labelCalories.AutoSize = true;
-            this.labelCalories.Location = new System.Drawing.Point(10, 180);
+            this.labelCalories.Location = new System.Drawing.Point(10, 210);
             this.labelCalories.Name = "labelCalories";
             this.labelCalories.Size = new System.Drawing.Size(50, 15);
-            this.labelCalories.TabIndex = 9;
+            this.labelCalories.TabIndex = 14;
             this.labelCalories.Text = "Kalorie:";
             // 
             // numericCalories
             // 
-            this.numericCalories.Location = new System.Drawing.Point(150, 178);
+            this.numericCalories.Location = new System.Drawing.Point(150, 208);
             this.numericCalories.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
+                10000,
+                0,
+                0,
+                0});
             this.numericCalories.Name = "numericCalories";
             this.numericCalories.Size = new System.Drawing.Size(80, 23);
-            this.numericCalories.TabIndex = 10;
+            this.numericCalories.TabIndex = 15;
             // 
             // labelSteps
             // 
             this.labelSteps.AutoSize = true;
-            this.labelSteps.Location = new System.Drawing.Point(10, 220);
+            this.labelSteps.Location = new System.Drawing.Point(10, 250);
             this.labelSteps.Name = "labelSteps";
             this.labelSteps.Size = new System.Drawing.Size(41, 15);
-            this.labelSteps.TabIndex = 11;
+            this.labelSteps.TabIndex = 16;
             this.labelSteps.Text = "Kroki:";
             // 
             // numericSteps
             // 
-            this.numericSteps.Location = new System.Drawing.Point(150, 218);
+            this.numericSteps.Location = new System.Drawing.Point(150, 248);
             this.numericSteps.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
+                100000,
+                0,
+                0,
+                0});
             this.numericSteps.Name = "numericSteps";
             this.numericSteps.Size = new System.Drawing.Size(100, 23);
-            this.numericSteps.TabIndex = 12;
+            this.numericSteps.TabIndex = 17;
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(220, 270);
+            this.buttonSave.Location = new System.Drawing.Point(220, 290);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(80, 30);
-            this.buttonSave.TabIndex = 13;
+            this.buttonSave.TabIndex = 18;
             this.buttonSave.Text = "Zapisz";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(310, 270);
+            this.buttonCancel.Location = new System.Drawing.Point(310, 290);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(80, 30);
-            this.buttonCancel.TabIndex = 14;
+            this.buttonCancel.TabIndex = 19;
             this.buttonCancel.Text = "Anuluj";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -230,7 +264,7 @@ namespace TreningTracker
             // AddTrainingForm
             // 
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 320);
+            this.ClientSize = new System.Drawing.Size(450, 340);
             this.Controls.Add(this.labelDate);
             this.Controls.Add(this.dateTimePickerDate);
             this.Controls.Add(this.labelType);
@@ -239,7 +273,12 @@ namespace TreningTracker
             this.Controls.Add(this.numericDistance);
             this.Controls.Add(this.labelDuration);
             this.Controls.Add(this.numericHours);
+            this.Controls.Add(this.labelHours);
             this.Controls.Add(this.numericMinutes);
+            this.Controls.Add(this.labelMinutes);
+            this.Controls.Add(this.numericSeconds);
+            this.Controls.Add(this.labelSeconds);
+            this.Controls.Add(this.buttonStopwatch);
             this.Controls.Add(this.labelCalories);
             this.Controls.Add(this.numericCalories);
             this.Controls.Add(this.labelSteps);
@@ -249,67 +288,14 @@ namespace TreningTracker
             this.Name = "AddTrainingForm";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Dodaj trening";
+            ((ISupportInitialize)(this.numericDistance)).EndInit();
+            ((ISupportInitialize)(this.numericHours)).EndInit();
+            ((ISupportInitialize)(this.numericMinutes)).EndInit();
+            ((ISupportInitialize)(this.numericSeconds)).EndInit();
+            ((ISupportInitialize)(this.numericCalories)).EndInit();
+            ((ISupportInitialize)(this.numericSteps)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-        }
-
-        #endregion
-
-        // Obsługa kliknięcia przycisku Zapisz
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            // Walidacja danych wejściowych
-            if (numericHours.Value == 0 && numericMinutes.Value == 0)
-            {
-                MessageBox.Show("Czas trwania treningu musi być dłuższy niż 0.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            // Utworzenie nowego obiektu treningu
-            TrainingSession newSession = new TrainingSession();
-            newSession.Date = dateTimePickerDate.Value.Date;
-            newSession.Distance = (double)numericDistance.Value;
-            newSession.Duration = new TimeSpan((int)numericHours.Value, (int)numericMinutes.Value, 0);
-            newSession.Calories = (int)numericCalories.Value;
-            newSession.Steps = (int)numericSteps.Value;
-            newSession.ActivityTypeId = comboActivityType.SelectedValue != null ? (int)comboActivityType.SelectedValue : 0;
-            // Zapis do bazy danych
-            _context.TrainingSessions.Add(newSession);
-            _context.SaveChanges();
-            // Sprawdzenie realizacji celów
-            var goal = _context.GoalSettings.FirstOrDefault();
-            bool dailyGoalReached = false;
-            bool weeklyGoalReached = false;
-            if (goal != null)
-            {
-                // Suma kroków w dniu treningu
-                DateTime sessionDate = newSession.Date;
-                int totalStepsThatDay = _context.TrainingSessions.Where(ts => ts.Date.Date == sessionDate).Sum(ts => ts.Steps);
-                if (totalStepsThatDay >= goal.DailyStepsGoal) dailyGoalReached = true;
-                // Liczba treningów w tygodniu treningu
-                int dow = (int)sessionDate.DayOfWeek;
-                if (dow == 0) dow = 7;
-                DateTime startOfWeek = sessionDate.AddDays(1 - dow).Date;
-                DateTime endOfWeek = startOfWeek.AddDays(6);
-                int totalTrainingsThatWeek = _context.TrainingSessions.Count(ts => ts.Date.Date >= startOfWeek && ts.Date.Date <= endOfWeek);
-                if (totalTrainingsThatWeek >= goal.WeeklyTrainingsGoal) weeklyGoalReached = true;
-            }
-            // Komunikat o zapisaniu i ewentualnej realizacji celów
-            string message = "Trening dodany pomyślnie.";
-            if (dailyGoalReached && weeklyGoalReached)
-                message += "\nGratulacje! Zrealizowano dzisiejszy cel kroków oraz tygodniowy cel treningów.";
-            else if (dailyGoalReached)
-                message += "\nGratulacje! Dzisiejszy cel kroków został osiągnięty.";
-            else if (weeklyGoalReached)
-                message += "\nGratulacje! Tygodniowy cel treningów został osiągnięty.";
-            MessageBox.Show(message, "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            // Zamknięcie formularza
-            this.Close();
-        }
-
-        // Obsługa kliknięcia przycisku Anuluj
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

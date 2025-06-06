@@ -15,7 +15,6 @@ namespace TreningTracker.Models
         [Required, MaxLength(50)]
         public string Name { get; set; }
 
-        // Relacja 1:N - typ ma wiele sesji treningowych
         public ICollection<TrainingSession> TrainingSessions { get; set; } = new List<TrainingSession>();
     }
 }

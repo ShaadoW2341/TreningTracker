@@ -1,49 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
-using System.Drawing;
-using TreningTracker.Data;
-using TreningTracker.Models;
 
-namespace TreningTracker
+namespace TreningTracker.Forms
 {
-    public partial class GoalsForm : Form
+    partial class GoalsForm
     {
-        private AppDbContext _context;
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
         private Label labelDailyGoal;
         private NumericUpDown numericDailyGoal;
         private Label labelWeeklyGoal;
         private NumericUpDown numericWeeklyGoal;
         private Button buttonSave;
         private Button buttonCancel;
-        // Bieżące ustawienie celów
-        private GoalSetting currentGoals;
-
-        public GoalsForm()
-        {
-            _context = new AppDbContext();
-            InitializeComponent();
-            // Wczytaj bieżące cele z bazy
-            currentGoals = _context.GoalSettings.FirstOrDefault();
-            if (currentGoals != null)
-            {
-                numericDailyGoal.Value = currentGoals.DailyStepsGoal;
-                numericWeeklyGoal.Value = currentGoals.WeeklyTrainingsGoal;
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_context != null) _context.Dispose();
-                if (components != null) components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
 
         private void InitializeComponent()
         {
@@ -53,6 +21,8 @@ namespace TreningTracker
             this.numericWeeklyGoal = new NumericUpDown();
             this.buttonSave = new Button();
             this.buttonCancel = new Button();
+            ((ISupportInitialize)(this.numericDailyGoal)).BeginInit();
+            ((ISupportInitialize)(this.numericWeeklyGoal)).BeginInit();
             this.SuspendLayout();
             // 
             // labelDailyGoal
@@ -68,23 +38,23 @@ namespace TreningTracker
             // 
             this.numericDailyGoal.Location = new System.Drawing.Point(220, 18);
             this.numericDailyGoal.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
+                100000,
+                0,
+                0,
+                0});
             this.numericDailyGoal.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+                1,
+                0,
+                0,
+                0});
             this.numericDailyGoal.Name = "numericDailyGoal";
             this.numericDailyGoal.Size = new System.Drawing.Size(80, 23);
             this.numericDailyGoal.TabIndex = 1;
             this.numericDailyGoal.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+                1,
+                0,
+                0,
+                0});
             // 
             // labelWeeklyGoal
             // 
@@ -99,23 +69,23 @@ namespace TreningTracker
             // 
             this.numericWeeklyGoal.Location = new System.Drawing.Point(220, 58);
             this.numericWeeklyGoal.Maximum = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
+                14,
+                0,
+                0,
+                0});
             this.numericWeeklyGoal.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+                1,
+                0,
+                0,
+                0});
             this.numericWeeklyGoal.Name = "numericWeeklyGoal";
             this.numericWeeklyGoal.Size = new System.Drawing.Size(80, 23);
             this.numericWeeklyGoal.TabIndex = 3;
             this.numericWeeklyGoal.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+                1,
+                0,
+                0,
+                0});
             // 
             // buttonSave
             // 
@@ -150,32 +120,10 @@ namespace TreningTracker
             this.Name = "GoalsForm";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Konfiguracja celów";
+            ((ISupportInitialize)(this.numericDailyGoal)).EndInit();
+            ((ISupportInitialize)(this.numericWeeklyGoal)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-        }
-
-        #endregion
-
-        // Obsługa kliknięcia przycisku Zapisz
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            if (currentGoals == null)
-            {
-                // Jeśli brak rekordu celów, utwórz nowy
-                currentGoals = new GoalSetting();
-                _context.GoalSettings.Add(currentGoals);
-            }
-            currentGoals.DailyStepsGoal = (int)numericDailyGoal.Value;
-            currentGoals.WeeklyTrainingsGoal = (int)numericWeeklyGoal.Value;
-            _context.SaveChanges();
-            MessageBox.Show("Cele zostały zapisane.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
-        }
-
-        // Obsługa kliknięcia przycisku Anuluj
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }
