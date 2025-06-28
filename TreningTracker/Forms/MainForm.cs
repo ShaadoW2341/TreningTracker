@@ -117,11 +117,5 @@ namespace TreningTracker.Forms
                 }
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if(button1.Text == "jabko") button1.Text = "banan";
-            else button1.Text = "jabko";
-        }
     }
 }

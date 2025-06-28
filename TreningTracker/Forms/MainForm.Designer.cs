@@ -28,7 +28,6 @@ namespace TreningTracker.Forms
             buttonHistory = new Button();
             buttonStats = new Button();
             buttonGoals = new Button();
-            button1 = new Button();
             groupDaily.SuspendLayout();
             groupWeekly.SuspendLayout();
             SuspendLayout();
@@ -37,11 +36,9 @@ namespace TreningTracker.Forms
             // 
             groupDaily.Controls.Add(labelDaySteps);
             groupDaily.Controls.Add(labelDayTrainings);
-            groupDaily.Location = new Point(11, 13);
-            groupDaily.Margin = new Padding(3, 4, 3, 4);
+            groupDaily.Location = new Point(10, 10);
             groupDaily.Name = "groupDaily";
-            groupDaily.Padding = new Padding(3, 4, 3, 4);
-            groupDaily.Size = new Size(423, 107);
+            groupDaily.Size = new Size(370, 80);
             groupDaily.TabIndex = 0;
             groupDaily.TabStop = false;
             groupDaily.Text = "Podsumowanie dnia";
@@ -49,28 +46,26 @@ namespace TreningTracker.Forms
             // labelDaySteps
             // 
             labelDaySteps.AutoSize = true;
-            labelDaySteps.Location = new Point(11, 33);
+            labelDaySteps.Location = new Point(10, 25);
             labelDaySteps.Name = "labelDaySteps";
-            labelDaySteps.Size = new Size(0, 20);
+            labelDaySteps.Size = new Size(0, 15);
             labelDaySteps.TabIndex = 0;
             // 
             // labelDayTrainings
             // 
             labelDayTrainings.AutoSize = true;
-            labelDayTrainings.Location = new Point(11, 67);
+            labelDayTrainings.Location = new Point(10, 50);
             labelDayTrainings.Name = "labelDayTrainings";
-            labelDayTrainings.Size = new Size(0, 20);
+            labelDayTrainings.Size = new Size(0, 15);
             labelDayTrainings.TabIndex = 1;
             // 
             // groupWeekly
             // 
             groupWeekly.Controls.Add(labelWeekSteps);
             groupWeekly.Controls.Add(labelWeekTrainings);
-            groupWeekly.Location = new Point(446, 13);
-            groupWeekly.Margin = new Padding(3, 4, 3, 4);
+            groupWeekly.Location = new Point(390, 10);
             groupWeekly.Name = "groupWeekly";
-            groupWeekly.Padding = new Padding(3, 4, 3, 4);
-            groupWeekly.Size = new Size(423, 107);
+            groupWeekly.Size = new Size(370, 80);
             groupWeekly.TabIndex = 1;
             groupWeekly.TabStop = false;
             groupWeekly.Text = "Podsumowanie tygodnia";
@@ -78,25 +73,24 @@ namespace TreningTracker.Forms
             // labelWeekSteps
             // 
             labelWeekSteps.AutoSize = true;
-            labelWeekSteps.Location = new Point(11, 33);
+            labelWeekSteps.Location = new Point(10, 25);
             labelWeekSteps.Name = "labelWeekSteps";
-            labelWeekSteps.Size = new Size(0, 20);
+            labelWeekSteps.Size = new Size(0, 15);
             labelWeekSteps.TabIndex = 0;
             // 
             // labelWeekTrainings
             // 
             labelWeekTrainings.AutoSize = true;
-            labelWeekTrainings.Location = new Point(11, 67);
+            labelWeekTrainings.Location = new Point(10, 50);
             labelWeekTrainings.Name = "labelWeekTrainings";
-            labelWeekTrainings.Size = new Size(0, 20);
+            labelWeekTrainings.Size = new Size(0, 15);
             labelWeekTrainings.TabIndex = 1;
             // 
             // buttonAddTraining
             // 
-            buttonAddTraining.Location = new Point(11, 133);
-            buttonAddTraining.Margin = new Padding(3, 4, 3, 4);
+            buttonAddTraining.Location = new Point(10, 100);
             buttonAddTraining.Name = "buttonAddTraining";
-            buttonAddTraining.Size = new Size(137, 40);
+            buttonAddTraining.Size = new Size(120, 30);
             buttonAddTraining.TabIndex = 2;
             buttonAddTraining.Text = "Dodaj trening";
             buttonAddTraining.UseVisualStyleBackColor = true;
@@ -104,10 +98,9 @@ namespace TreningTracker.Forms
             // 
             // buttonHistory
             // 
-            buttonHistory.Location = new Point(160, 133);
-            buttonHistory.Margin = new Padding(3, 4, 3, 4);
+            buttonHistory.Location = new Point(140, 100);
             buttonHistory.Name = "buttonHistory";
-            buttonHistory.Size = new Size(137, 40);
+            buttonHistory.Size = new Size(120, 30);
             buttonHistory.TabIndex = 3;
             buttonHistory.Text = "Historia";
             buttonHistory.UseVisualStyleBackColor = true;
@@ -115,10 +108,9 @@ namespace TreningTracker.Forms
             // 
             // buttonStats
             // 
-            buttonStats.Location = new Point(309, 133);
-            buttonStats.Margin = new Padding(3, 4, 3, 4);
+            buttonStats.Location = new Point(270, 100);
             buttonStats.Name = "buttonStats";
-            buttonStats.Size = new Size(137, 40);
+            buttonStats.Size = new Size(120, 30);
             buttonStats.TabIndex = 4;
             buttonStats.Text = "Statystyki";
             buttonStats.UseVisualStyleBackColor = true;
@@ -126,38 +118,25 @@ namespace TreningTracker.Forms
             // 
             // buttonGoals
             // 
-            buttonGoals.Location = new Point(457, 133);
-            buttonGoals.Margin = new Padding(3, 4, 3, 4);
+            buttonGoals.Location = new Point(400, 100);
             buttonGoals.Name = "buttonGoals";
-            buttonGoals.Size = new Size(137, 40);
+            buttonGoals.Size = new Size(120, 30);
             buttonGoals.TabIndex = 6;
             buttonGoals.Text = "Cele";
             buttonGoals.UseVisualStyleBackColor = true;
             buttonGoals.Click += buttonGoals_Click;
             // 
-            // button1
-            // 
-            button1.Location = new Point(678, 151);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 7;
-            button1.Text = "jabko";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 200);
-            Controls.Add(button1);
+            ClientSize = new Size(800, 150);
             Controls.Add(groupDaily);
             Controls.Add(groupWeekly);
             Controls.Add(buttonAddTraining);
             Controls.Add(buttonHistory);
             Controls.Add(buttonStats);
             Controls.Add(buttonGoals);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Trening Tracker";
@@ -167,6 +146,5 @@ namespace TreningTracker.Forms
             groupWeekly.PerformLayout();
             ResumeLayout(false);
         }
-        private Button button1;
     }
 }
