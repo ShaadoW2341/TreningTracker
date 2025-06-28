@@ -49,15 +49,15 @@ namespace TreningTracker.Forms
             DateTime weekEndUtc = weekStartUtc.AddDays(6).Date;
 
             var sessions = _context.TrainingSessions.ToList();
-            
+
             var todaySessions = sessions.Where(ts => ts.Date.Date == todayUtc.Date).ToList();
-            var weekSessions = sessions.Where(ts => 
-                ts.Date.Date >= weekStartUtc.Date && 
+            var weekSessions = sessions.Where(ts =>
+                ts.Date.Date >= weekStartUtc.Date &&
                 ts.Date.Date <= weekEndUtc.Date).ToList();
-            
+
             int stepsToday = todaySessions.Sum(ts => ts.Steps);
             int trainingsToday = todaySessions.Count;
-            
+
             int stepsThisWeek = weekSessions.Sum(ts => ts.Steps);
             int trainingsThisWeek = weekSessions.Count;
 
@@ -75,7 +75,7 @@ namespace TreningTracker.Forms
             using (var form = new AddTrainingForm(new TrainingSession()))
             {
                 var result = form.ShowDialog();
-                if (result == DialogResult.OK)  
+                if (result == DialogResult.OK)
                 {
                     if (_context != null)
                     {
@@ -85,7 +85,8 @@ namespace TreningTracker.Forms
                     RefreshSummaryData();
                 }
             }
-            
+
+
         }
 
         private void buttonHistory_Click(object sender, EventArgs e)
@@ -115,6 +116,12 @@ namespace TreningTracker.Forms
                     RefreshSummaryData();
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(button1.Text == "jabko") button1.Text = "banan";
+            else button1.Text = "jabko";
         }
     }
 }

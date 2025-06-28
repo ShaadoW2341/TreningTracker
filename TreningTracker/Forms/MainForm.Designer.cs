@@ -28,6 +28,7 @@ namespace TreningTracker.Forms
             buttonHistory = new Button();
             buttonStats = new Button();
             buttonGoals = new Button();
+            button1 = new Button();
             groupDaily.SuspendLayout();
             groupWeekly.SuspendLayout();
             SuspendLayout();
@@ -134,11 +135,22 @@ namespace TreningTracker.Forms
             buttonGoals.UseVisualStyleBackColor = true;
             buttonGoals.Click += buttonGoals_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(678, 151);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 7;
+            button1.Text = "jabko";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(914, 200);
+            Controls.Add(button1);
             Controls.Add(groupDaily);
             Controls.Add(groupWeekly);
             Controls.Add(buttonAddTraining);
@@ -155,5 +167,6 @@ namespace TreningTracker.Forms
             groupWeekly.PerformLayout();
             ResumeLayout(false);
         }
+        private Button button1;
     }
 }
